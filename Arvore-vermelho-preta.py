@@ -56,7 +56,7 @@ class ArvoreRB:
         else:
             auxiliar.setProximo(no)
         no.setCor("vermelho")
-        #self.inserirFix(no)
+        self.inserirFix(no)
 
     def inserirFix(self, no):
         while no.getPai().getCor() == "vermelho":
@@ -70,10 +70,10 @@ class ArvoreRB:
                 else:
                     if no == no.getPai().getProximo():
                         no = no.getPai()
-                        #self.rotEsq(no)
+                        self.rotEsq(no)
                     no.getPai().setCor("preto")
                     no.getPai().getPai().setCor("vermelho")
-                    #self.rotDir(no.getPai().getPai())
+                    self.rotDir(no.getPai().getPai())
             else:
                 auxiliar = no.getPai().getPai().getAnterior()
                 if auxiliar.getCor() == "vermelho":
@@ -84,8 +84,33 @@ class ArvoreRB:
                 else:
                     if auxiliar == auxiliar.getPai().getAnterior():
                         no = no.getPai()
-                        #self.rotDir(no)
+                        self.rotDir(no)
                     no.getPai().setCor("preto")
                     no.getPai().getPai().setCor("vermelho")
-                    #self.rotEsq(no.getPai().getPai())
+                    self.rotEsq(no.getPai().getPai())
         self.raiz.setCor("preto")
+
+    def rotEsq(self, no):
+        noRotacionado = no.getProximo()
+        no.setProximo(noRotacionado.getAnterior())
+        noRotacionado.getAnterior().setPai(no)
+        noRotacionado.setPai(no.getPai())
+        if no.getPai() == None:
+            self.raiz = noRotacionado
+        elif no == no.getPai().getAnterior():
+            no.getPai().setAnterior(noRotacionado)
+        else:
+            no.getPai().setProximo(noRotacionado)
+        noRotacionado.setAnterior(no)
+        no.setPai(noRotacionado)
+
+    def rotDir(self,no):
+        noRotacionado = no.getPai()
+        noRotacionado.setAnterior(no.getProximo())
+        no.setProximo(noRotacionado)
+        noRotacionado.getAnterior().setPai(noRotacionado)
+        no.setPai(noRotacionado.getPai())
+        noRotacionado.setPai(no)
+        if no.getPai() == None:
+            self.raiz = no
+        #falta ?
