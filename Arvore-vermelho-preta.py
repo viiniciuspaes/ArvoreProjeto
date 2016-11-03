@@ -33,11 +33,31 @@ class ArvoreRB:
         self.raiz = None
         #self.null = NoHash(None) #nao sei se sera necessario criar um ponteiro para um No preto null
 
-    def add(self,no):
-        if self.raiz == None:
-            self.raiz= no
-        else:
-            self.inserir(no)
+    def minimoArvore(self,no):
+        while no.getAnterior() != None:
+            no = no.getAnterior()
+        return no
+    def maximoArvore(self,no):
+        while no.getProximo() != None:
+            no=no.getProximo()
+        return no
+
+    def sucessorArvore(self,no):
+        if no.getProximo() != None:
+            return self.minimoArvore(no.getProximo())
+        auxiliar = no.getPai()
+        while auxiliar != None and no == auxiliar.getProximo():
+            no = auxiliar
+            auxiliar = auxiliar.getPai()
+        return auxiliar
+    def predecessorArvore(self,no):
+        if no.getAnterior != None:
+            return self.maximoArvore(no.getAnterior())
+        auxiliar = no.getPai()
+        while auxiliar != None and no == auxiliar.getAnterior():
+            no = auxiliar
+            auxiliar = auxiliar.getPai()
+        return auxiliar
 
     def inserir(self, no):
         auxiliar = None
@@ -114,3 +134,25 @@ class ArvoreRB:
         if no.getPai() == None:
             self.raiz = no
         #falta ?
+
+    def delete(self,no):
+        if no.getAnterior() == None and no.getProximo()== None:
+            auxiliar = no
+        else:
+           auxiliar = self.sucessorArvore(no)
+        if auxiliar.getAnterior() != None:
+            x = auxiliar.getAnterior()   # de onde veio o fuck x?
+        else:
+            x = auxiliar.getProximo()
+        x.setPai(auxiliar.setPai())
+        if auxiliar.getPai() != None:    #livro com erro?
+            self.raiz = x
+        elif auxiliar == auxiliar.getPai().getAnterior():
+            auxiliar.getPai().setAnterior(x)
+        else:
+            auxiliar.getPai().setProximo(x)
+        if auxiliar != no:
+            no.setValor(x.getValor())
+       # if auxiliar.getCor() == "preto":
+           # self.deleteFix(x)
+        return auxiliar
