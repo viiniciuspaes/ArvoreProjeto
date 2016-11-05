@@ -156,3 +156,34 @@ class ArvoreRB:
        # if auxiliar.getCor() == "preto":
            # self.deleteFix(x)
         return auxiliar
+
+    def deleteFix(self,no):
+        while no != self.raiz:
+            if no == no.getPai().getAnterior():
+                auxiliar = no.getPai().getProximo()
+                if auxiliar.getCor() == "preto":
+                    no.getPai().setCor("vermelho")
+                    self.rotEsq(no.getPai())
+                    auxiliar=no.getPai().getProximo()
+                if auxiliar.getAnterior().getCor() == "preto" and auxiliar.getProximo().getCor()=="vermelho":
+                    auxiliar.setCor("vermelho")
+                    no=no.getPai()
+                elif auxiliar.getProximo().getCor() == "preto":
+                    auxiliar.getAnterior().setCor("vermelho")
+                    self.rotDir(auxiliar)
+                    auxiliar = no.getPai().getProximo()
+                    auxiliar.setCor(no.getPai().getCor())
+                    no.getPai().setCor("preto")
+                    auxiliar.getProximo().setCor("preto")
+                    self.rotEsq(no.getPai())
+                    no=self.raiz
+                else:
+                    auxiliar.getProximo().setCor("vermelho")
+                    self.rotDir(auxiliar)
+                    auxiliar = no.getPai().getAnterior()
+                    auxiliar.setCor(no.getPai().getCor())
+                    no.getPai().setCor("preto")
+                    auxiliar.getAnterior().setCor("preto")
+                    self.rotEsq(no.getPai())
+                    no = self.raiz
+        no.setCor("preto")
