@@ -141,7 +141,7 @@ class ArvoreRB:
         else:
            auxiliar = self.sucessorArvore(no)
         if auxiliar.getAnterior() != None:
-            x = auxiliar.getAnterior()   # de onde veio o fuck x?
+            x = auxiliar.getAnterior()
         else:
             x = auxiliar.getProximo()
         x.setPai(auxiliar.setPai())
@@ -153,8 +153,8 @@ class ArvoreRB:
             auxiliar.getPai().setProximo(x)
         if auxiliar != no:
             no.setValor(x.getValor())
-       # if auxiliar.getCor() == "preto":
-           # self.deleteFix(x)
+        if auxiliar.getCor() == "preto":
+            self.deleteFix(x)
         return auxiliar
 
     def deleteFix(self,no):
