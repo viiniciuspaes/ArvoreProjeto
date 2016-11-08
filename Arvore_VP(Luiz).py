@@ -168,3 +168,72 @@ class ArvoreRB:
                     z.getPai().getPai().setCor('red')
                     self.rotateLeft(z.getPai().getPai())
             self.getRoot().setCor('black')
+
+    def RBdelete(self, z):
+        if z.getLeft() == self.none or z.getRight() == self.none:
+            y = z
+        else:
+            y = self.sucessor(z)
+        if y.getLeft() != self.none:
+            x = y.getLeft()
+        else:
+            x = y.getRight()
+        x.setPai(y.getPai())
+        if y.getPai() == self.none:
+            self.setRoot(x)
+        else:
+            if y == y.getPai().getLeft():
+                y.getPai().setLeft(x)
+            else:
+                y.getPai().setRight(x)
+        if y != z:
+            z.setChave(y.getChave())
+        if y.getCor() == 'black':
+            self.deleteFixUp(x)
+        return y
+
+    def deleteFixUp(self, x):
+        while x != self.getRoot() and x.getCor() == 'black':
+            if x == x.getPai().getLeft():
+                w = x.getPai().getRight()
+                if w.getCor() == 'red':
+                    w.setCor('black')
+                    x.getPai().setCor('red')
+                    self.rotateLeft(x.getPai())
+                    w = x.getPai().getRight()
+                if w.getLeft().getCor() == 'black' and w.getRight().getCor() == 'black':
+                    w.setCor('red')
+                    x = x.getPai()
+                else:
+                    if w.getRight().getCor() == 'black':
+                        w.getLeft().setCor('black')
+                        w.setCor('red')
+                        self.rotateRight(w)
+                        w = x.getPai().getRight()
+                    w.setCor(x.getPai().getCor())
+                    x.getPai().setCor('black')
+                    w.getRight().setCor('black')
+                    self.rotateLeft(x.getPai())
+                    x = self.getRoot()
+            else:
+                w = x.getPai().getLeft()
+                if w.getCor() == 'red':
+                    w.setCor('black')
+                    x.getPai().setCor('red')
+                    self.rotateRight(x.getPai())
+                    w = x.getPai().getLeft()
+                if w.getRight().getCor() == 'black' and w.getLeft().getCor() == 'black':
+                    w.setCor('red')
+                    x = x.getPai()
+                else:
+                    if w.getLeft().getCor() == 'black':
+                        w.getRight().setCor('black')
+                        w.setCor('red')
+                        self.rotateLeft(w)
+                        w = x.getPai().getLeft()
+                    w.setCor(x.getPai().getCor())
+                    x.getPai().setCor('black')
+                    w.getLeft().setCor('black')
+                    self.rotateRight(x.getPai())
+                    x = self.getRoot()
+        x.setCor('black')  
