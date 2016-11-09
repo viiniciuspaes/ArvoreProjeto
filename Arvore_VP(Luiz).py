@@ -254,8 +254,8 @@ class ArvoreRB:
         return x
 
 a = ArvoreRB()
-no= No(20)
-no2 = No(10)
+no= No("a")
+no2 = No("b")
 a.RBinsert(no)
 a.RBinsert(no2)
-print(a.buscar(10))
+print(a.buscar("b"))
