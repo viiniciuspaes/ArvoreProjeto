@@ -1,5 +1,5 @@
 class No:
-    def __init__(self, chave, data):
+    def __init__(self, chave, data = 0):
         self.data = data
         self.chave = chave
         self.cor = 'red'
@@ -136,7 +136,7 @@ class ArvoreRB:
         z.setRight(self.none)
         z.setCor('red')
         self.insertFixUp(z)
-
+        
     def insertFixUp(self, z):
         while z.getPai().getCor() == 'red':
             if z.getPai() == z.getPai().getPai().getLeft():
@@ -236,4 +236,23 @@ class ArvoreRB:
                     w.getLeft().setCor('black')
                     self.rotateRight(x.getPai())
                     x = self.getRoot()
-        x.setCor('black')  
+        x.setCor('black')
+
+    def percorrerEmOrdem(self, x):
+        if x != None:
+            self.percorrerEmOrdem(x.getLeft())
+            print(x.chave)
+            self.percorrerEmOrdem(x.getRight())
+
+    def buscar(self, x, k):
+        if (x == None) or (k == x.getChave()):
+            return x
+        elif k < x.getChave():
+            return self.buscar(x.getLeft(), k)
+        else:
+            return self.buscar(x.getRight(), k)
+
+a = ArvoreRB()
+a.RBinsert(No(20))
+a.RBinsert(No(15))
+a.RBinsert(No(14))
