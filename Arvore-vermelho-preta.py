@@ -60,13 +60,8 @@ class ArvoreRB:
             no = auxiliar
             auxiliar = auxiliar.getPai()
         return auxiliar
-    def inserir(self,no):
-        if self.raiz == None:
-            self.raiz=no
-        else:
-            self.inserirPos(no)
 
-    def inserirPos(self, no):
+    def inserir(self, no):
         auxiliar = None
         noLocal = self.raiz
         while noLocal != None:
