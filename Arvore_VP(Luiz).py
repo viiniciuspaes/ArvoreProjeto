@@ -56,7 +56,7 @@ class ArvoreRB:
         return self.root
     
     def setRoot(self, x):
-        self._root = x
+        self.root = x
 
     def maximo(self, x):
         while x.getRight() != None:
@@ -167,7 +167,7 @@ class ArvoreRB:
                     z.getPai().setCor('black')
                     z.getPai().getPai().setCor('red')
                     self.rotateLeft(z.getPai().getPai())
-            self.getRoot().setCor('black')
+        self.getRoot().setCor('black')
 
     def RBdelete(self, z):
         if z.getLeft() == self.none or z.getRight() == self.none:
@@ -244,15 +244,18 @@ class ArvoreRB:
             print(x.chave)
             self.percorrerEmOrdem(x.getRight())
 
-    def buscar(self, x, k):
-        if (x == None) or (k == x.getChave()):
-            return x
-        elif k < x.getChave():
-            return self.buscar(x.getLeft(), k)
-        else:
-            return self.buscar(x.getRight(), k)
+    def buscar(self, valor):
+        x = self.root
+        while (x != None) and (valor != x.getChave()):
+            if valor > x.getChave():
+                x = x.getRight()
+            else:
+                x = x.getLeft()
+        return x
 
 a = ArvoreRB()
-a.RBinsert(No(20))
-a.RBinsert(No(15))
-a.RBinsert(No(14))
+no= No(20)
+no2 = No(10)
+a.RBinsert(no)
+a.RBinsert(no2)
+print(a.buscar(10))
