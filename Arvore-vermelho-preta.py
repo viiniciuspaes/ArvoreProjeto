@@ -60,13 +60,14 @@ class ArvoreRB:
             no = auxiliar
             auxiliar = auxiliar.getPai()
         return auxiliar
+
     def inserir(self,no):
         if self.raiz == None:
             self.raiz=no
         else:
-            self.inserirPos(no)
+            self.inseri(no)
 
-    def inserirPos(self, no):
+    def inseri(self, no):
         auxiliar = None
         noLocal = self.raiz
         while noLocal != None:
@@ -194,3 +195,12 @@ class ArvoreRB:
                     self.rotEsq(no.getPai())
                     no = self.raiz
         no.setCor("preto")
+
+    def buscar(self, valor):  # busca nao recursiva custo menor mas sem graça
+        x = self.raiz
+        while x != None and valor != x.getValor():
+            if valor > x.getValor():
+                x = x.getProximo()
+            else:
+                x = x.getAnterior()
+        return x
