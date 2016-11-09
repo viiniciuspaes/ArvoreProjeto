@@ -1,4 +1,4 @@
-class Aluno:
+class Usuario:
     def __init__(self, cpf, nome):
         self.valor = cpf
         self.anterior = None
@@ -24,14 +24,14 @@ class Aluno:
         return self.anterior
     def getProximo(self):
         return self.proximo
-    def setAnterior(self,no):
-        self.anterior = no
-    def setProximo(self,no):
-        self.proximo = no
+    def setAnterior(self, usuario):
+        self.anterior = usuario
+    def setProximo(self, usuario):
+        self.proximo = usuario
     def getPai(self):
         return self.pai
-    def setPai(self,no):
-        self.pai = no
+    def setPai(self, usuario):
+        self.pai = usuario
     def getCor(self):
         return self.cor
     def setCor(self,cor):
@@ -69,14 +69,14 @@ class Livro:
         return self.anterior
     def getProximo(self):
         return self.proximo
-    def setAnterior(self,no):
-        self.anterior = no
-    def setProximo(self,no):
-        self.proximo = no
+    def setAnterior(self, livro):
+        self.anterior = livro
+    def setProximo(self, livro):
+        self.proximo = livro
     def getPai(self):
         return self.pai
-    def setPai(self,no):
-        self.pai = no
+    def setPai(self, livro):
+        self.pai = livro
     def getCor(self):
         return self.cor
     def setCor(self,cor):
