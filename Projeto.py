@@ -48,6 +48,7 @@ class Livro:
         self.reservado = False
         #self.alugado = False
         self.alugou = []
+        self.reservou = []
 
     def getValor(self):
         return self.valor
@@ -81,3 +82,40 @@ class Livro:
         return self.cor
     def setCor(self,cor):
         self.cor=cor
+
+a = ArvoreRB_Livro()
+b = ArvoreRB_Usuario()
+
+def cadastroLivro():
+    titulo = #Pyqt dado1
+    quantidade = # Pyqt dado2
+    livro = Livro(titulo,quantidade)
+    a.inserir(livro)
+
+def cadastroUsuario():
+    cpf = #Pyqt dado1
+    nome = # Pyqt dado2
+    usuario = Usuario(cpf,nome)
+    b.inserir(usuario)
+
+def descadastroLivro():
+    titulo = #Pyqt dado1
+    no = a.buscar(titulo)
+    a.delete(no)
+
+def descadastroUsuario():
+    cpf = #Pyqt dado1
+    no = b.buscar(cpf)
+    b.delete(no)
+
+def alugarLivro():
+    tituloDesejado = #Pyqt dado1
+    no = a.buscar(tituloDesejado)
+    disp = no.getQuantidade()
+    resev = no.isReservado()
+    if disp == 0 and resev == False:
+        print("Desculpe, mas o livro não está disponivel")
+        print("Deseja reservar?(Y/N)")
+        resposta = input()
+        if resposta == "Y":
+
