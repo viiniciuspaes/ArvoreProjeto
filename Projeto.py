@@ -66,6 +66,10 @@ class Livro:
         self.alugou.append(aluno)
     def removeAlugado(self,aluno):
         self.alugou.remove(aluno)
+    def addReservado(self, aluno):
+        self.reservado.append(aluno)
+    def removeReservado(self):
+        return self.reservado.pop(0)
     def getAnterior(self):
         return self.anterior
     def getProximo(self):
@@ -118,5 +122,42 @@ def alugarLivro():
         print("Deseja reservar?(Y/N)")
         resposta = input()
         if resposta == "Y":
-            #falta terminar saparte
-
+            no.addReservado(usuario.getValor())
+        else:
+            print("Obrigado pela preferência, caso deseje outro título, por favor informe o nome!")
+    elif disp != 0 and resev == True:
+        print("O livro já está reservado!")
+        print("Deseja entrar na fila da reserva?(Y/N)")
+        resposta = input()
+        if resposta == "Y":
+            no.addReservado(usuario.getValor())
+            print("Você é o número",no.reservou.index(usuario.getValor())+1,"da fila")
+        else:
+            print("Obrigado pela preferência, caso deseje outro título, por favor informe o nome!")
+    elif disp !=0 and  resev == False:
+        print("Livro disponivel, este realmente é o título que você deseja?(Y/N)")
+        resposta = input()
+        if resposta =="Y":
+            usuario.addAlugados(no)
+            no.addAlugado(usuario.getValor())
+            no.mudarQuantidade(-1)
+        else:
+            print("Obrigado pela preferência, caso deseje outro título, por favor informe o nome!")
+def devolverLivro():
+    tituloRetornado = #pyqt dado
+    no = a.buscar(tituloRetornado)
+    disp = no.getQuantidade()
+    resev = no.isReservado()
+    if disp == 0 and resev == True:
+        no.removeAlugado(usuario.getValor())
+        reservou =  no.removeReservado()
+        no.addAlugado(reservou)
+        usuario.removerAlugado(no)
+        print("Livro retornado com sucesso!")
+        if len(no.reservou) == 0:
+            no.reservado = False
+    elif disp !=0:
+            no.removeAlugado(usuario.getValor())
+            usuario.removerAlugado(no)
+            no.mudarQuantidade(1)
+            print("Livro retornado com sucesso!")
