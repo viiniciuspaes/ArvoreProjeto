@@ -165,7 +165,7 @@ class Ui_MainWindow(object):
         self.menu.setTabText(self.menu.indexOf(self.Biblioteca), _translate("MainWindow", "Biblioteca", None))
 
 
-if __name__ == "__main__":
+def run():
     import sys
     app = QtGui.QApplication(sys.argv)
     MainWindow = QtGui.QMainWindow()
@@ -173,3 +173,5 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
+
+run()
