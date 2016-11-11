@@ -118,4 +118,5 @@ def alugarLivro():
         print("Deseja reservar?(Y/N)")
         resposta = input()
         if resposta == "Y":
+            #falta terminar saparte
 
