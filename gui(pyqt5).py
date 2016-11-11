@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
+    def iniciarUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(420, 314)
         self.centralWidget = QtWidgets.QWidget(MainWindow)
@@ -121,11 +121,11 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.menu)
         MainWindow.setCentralWidget(self.centralWidget)
 
-        self.retranslateUi(MainWindow)
+        self.nomearUi(MainWindow)
         self.menu.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-    def retranslateUi(self, MainWindow):
+    def nomearUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Biblioteca"))
         self.button_Cadastrar_livro.setText(_translate("MainWindow", "Cadastrar"))
@@ -157,7 +157,7 @@ def run():
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
+    ui.iniciarUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
 
