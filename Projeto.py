@@ -445,7 +445,7 @@ class Ui_MainWindow(object):
 
     def cadastroLivro(self):
         titulo =  self.editText_nome_livros.text()
-        quantidade =  self.editText_quantidade_livros.text()
+        quantidade =  int(self.editText_quantidade_livros.text())
         livro = Livro(titulo, quantidade)
         self.arvore_livro.inserir(livro)
 
@@ -530,7 +530,7 @@ class Ui_MainWindow(object):
     def buscarLivro(self):
         no = self.arvore_livro.buscar(self.editText_buscar_livro.text())
         self.textView_nome_Livro.setText(no.getValor())
-        self.textView_Quantidade.setText(no.getQuantidade())
+        self.textView_Quantidade.setText(str(no.getQuantidade()))
         if no.isDisponivel == True:
             self.textView_isDisponivel.setText("disponivel")
         else:
