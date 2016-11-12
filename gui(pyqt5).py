@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_MainWindow(object):
     def iniciarUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -61,11 +62,22 @@ class Ui_MainWindow(object):
         self.button_Cadastrar_usuario = QtWidgets.QPushButton(self.frame)
         self.button_Cadastrar_usuario.setGeometry(QtCore.QRect(300, 150, 85, 27))
         self.button_Cadastrar_usuario.setObjectName("button_Cadastrar_usuario")
+        self.button_Descadastrar_usuario = QtWidgets.QPushButton(self.frame)
+        self.button_Descadastrar_usuario.setGeometry(QtCore.QRect(120, 240, 131, 27))
+        self.button_Descadastrar_usuario.setObjectName("button_Descadastrar_usuario")
+        self.button_Descadastrar_livro = QtWidgets.QPushButton(self.frame)
+        self.button_Descadastrar_livro.setGeometry(QtCore.QRect(274, 240, 131, 27))
+        self.button_Descadastrar_livro.setObjectName("button_Descadastrar_livro")
         self.menu.addTab(self.Cadastros, "")
         self.Biblioteca = QtWidgets.QWidget()
         self.Biblioteca.setObjectName("Biblioteca")
         self.frame_2 = QtWidgets.QFrame(self.Biblioteca)
         self.frame_2.setGeometry(QtCore.QRect(0, 0, 411, 281))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frame_2.sizePolicy().hasHeightForWidth())
+        self.frame_2.setSizePolicy(sizePolicy)
         self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_2.setObjectName("frame_2")
@@ -122,35 +134,36 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralWidget)
 
         self.nomearUi(MainWindow)
-        self.menu.setCurrentIndex(1)
+        self.menu.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def nomearUi(self, MainWindow):
-        #_translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle("Biblioteca")
+
+        MainWindow.setWindowTitle( "MainWindow")
         self.button_Cadastrar_livro.setText( "Cadastrar")
-        self.button_Cancelar.setText("Cancelar")
-        self.label_nome_livros.setText( "Nome")
-        self.label_quatidade_livros.setText("Quantidade")
-        self.Label_Livros.setText( "Cadastro De Livros")
+        self.button_Cancelar.setText( "Cancelar")
+        self.label_nome_livros.setText("Nome")
+        self.label_quatidade_livros.setText( "Quantidade")
+        self.Label_Livros.setText("Cadastro De Livros")
         self.label_Usuarios.setText("Cadastro De Usuarios")
-        self.label_nome_usuarios.setText("Nome")
-        self.label_cpf.setText("CPF")
+        self.label_nome_usuarios.setText( "Nome")
+        self.label_cpf.setText( "CPF")
         self.button_Cadastrar_usuario.setText( "Cadastrar")
-        self.menu.setTabText(self.menu.indexOf(self.Cadastros),"Cadastros")
-        self.button_Cancelar_2.setText("Cancelar")
+        self.button_Descadastrar_usuario.setText( "Descadastrar Usuario")
+        self.button_Descadastrar_livro.setText("Descadastrar Livro")
+        self.menu.setTabText(self.menu.indexOf(self.Cadastros),  "Cadastros")
+        self.button_Cancelar_2.setText( "Cancelar")
         self.textView_Nome_usuario.setText( "Usuario")
-        self.textView_nome_Livro.setText("Livro")
-        self.button_buscar_usuario.setText("Buscar")
+        self.textView_nome_Livro.setText( "Livro")
+        self.button_buscar_usuario.setText( "Buscar")
         self.button_buscar_livro.setText( "Buscar")
         self.textView_isDisponivel.setText( "Disponivel")
-        self.label_quantidade.setText("Quantidade:")
+        self.label_quantidade.setText( "Quantidade:")
         self.textView_Quantidade.setText( "numeros")
-        self.button_devolver.setText("Devolver")
-        self.button_reservar.setText("Reservar")
-        self.button_alugar.setText("Alugar")
-        self.menu.setTabText(self.menu.indexOf(self.Biblioteca),"Biblioteca")
-
+        self.button_devolver.setText( "Devolver")
+        self.button_reservar.setText( "Reservar")
+        self.button_alugar.setText( "Alugar")
+        self.menu.setTabText(self.menu.indexOf(self.Biblioteca),  "Biblioteca")
 
 def run():
     import sys
