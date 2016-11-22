@@ -2,26 +2,26 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Usuario:
     def __init__(self, cpf, nome):
-        self.valor = cpf
+        self.chave = cpf
         self.anterior = None
         self.proximo = None
         self.pai = None
         self.cor = "preto"
         self.nome = nome
-        self.alugou = []
+        self.livros_alugados = []
 
-    def getValor(self):
-        return self.valor
-    def setValor(self,valor):
-        self.valor=valor
+    def getChave(self):
+        return self.chave
+    def setChave(self,valor):
+        self.chave=valor
     def getNome(self):
         return self.nome
     def getAlugados(self):
-        return self.alugou
-    def addAlugados(self,livro):
-        self.alugou.append(livro)
+        return self.livros_alugados
+    def adicionarAlugado(self,livro):
+        self.livros_alugados.append(livro)
     def removerAlugado(self,livro):
-        self.alugou.remove(livro)
+        self.livros_alugados.remove(livro)
     def getAnterior(self):
         return self.anterior
     def getProximo(self):
@@ -41,7 +41,7 @@ class Usuario:
 
 class Livro:
     def __init__(self,nome,quantidade):
-        self.valor = nome
+        self.chave = nome
         self.anterior = None
         self.proximo = None
         self.pai = None
@@ -49,29 +49,29 @@ class Livro:
         self.quantidade = quantidade
         self.reservado = False
         self.alugado = False
-        self.alugou = []
-        self.reservou = []
+        self.usuarios_alugou = []
+        self.usuarios_reservou = []
 
-    def getValor(self):
-        return self.valor
-    def setValor(self,valor):
-        self.valor=valor
+    def getChave(self):
+        return self.chave
+    def setChave(self,valor):
+        self.chave=valor
     def getQuantidade(self):
         return self.quantidade
     def mudarQuantidade(self,numero):
         self.quantidade= self.quantidade + numero
     def isReservado(self):
         return self.reservado
-    def getAlugados(self):
-        return self.alugou
-    def addAlugado(self,aluno):
-        self.alugou.append(aluno)
-    def removeAlugado(self,aluno):
-        self.alugou.remove(aluno)
-    def addReservado(self, aluno):
-        self.reservado.append(aluno)
-    def removeReservado(self):
-        return self.reservado.pop(0)
+    def getAluguel(self):
+        return self.usuarios_alugou
+    def adicionarAluguel(self,aluno):
+        self.usuarios_alugou.append(aluno)
+    def removeAluguel(self,aluno):
+        self.usuarios_alugou.remove(aluno)
+    def adicionarReserva(self, aluno):
+        self.usuarios_reservou.append(aluno)
+    def removeReserva(self):
+        return self.usuarios_reservou.pop(0)
     def getAnterior(self):
         return self.anterior
     def getProximo(self):
@@ -132,14 +132,14 @@ class ArvoreRB:
         noLocal = self.raiz
         while noLocal != None:
             auxiliar = noLocal
-            if no.getValor() < noLocal.getValor():
+            if no.getChave() < noLocal.getChave():
                 noLocal = noLocal.getAnterior()
             else:
                 noLocal = noLocal.getProximo()
         no.setPai(auxiliar)
         if auxiliar == None:
             self.raiz=no
-        elif no.getValor() < auxiliar.getValor():
+        elif no.getChave() < auxiliar.getChave():
             auxiliar.setAnterior(no)
         else:
             auxiliar.setProximo(no)
@@ -201,7 +201,7 @@ class ArvoreRB:
         noRotacionado.setPai(no)
         if no.getPai() == None:
             self.raiz = no
-        #falta ?
+        #falta coisa
 
     def delete(self,no):
         if no.getAnterior() == None and no.getProximo()== None:
@@ -213,14 +213,14 @@ class ArvoreRB:
         else:
             x = auxiliar.getProximo()
         x.setPai(auxiliar.setPai())
-        if auxiliar.getPai() != None:    #livro com erro?
+        if auxiliar.getPai() != None:
             self.raiz = x
         elif auxiliar == auxiliar.getPai().getAnterior():
             auxiliar.getPai().setAnterior(x)
         else:
             auxiliar.getPai().setProximo(x)
         if auxiliar != no:
-            no.setValor(x.getValor())
+            no.setValor(x.getChave())
         if auxiliar.getCor() == "preto":
             self.deleteFix(x)
         return auxiliar
@@ -256,10 +256,10 @@ class ArvoreRB:
                     no = self.raiz
         no.setCor("preto")
 
-    def buscar(self, valor):  # busca nao recursiva custo menor mas sem graça
+    def buscar(self, chave):
         x = self.raiz
-        while x != None and valor != x.getValor():
-            if valor > x.getValor():
+        while x != None and chave != x.getChave():
+            if chave > x.getChave():
                 x = x.getProximo()
             else:
                 x = x.getAnterior()
@@ -271,7 +271,8 @@ class Ui_MainWindow(object):
         self.arvore_livro = arvore
         self.arvore_usuario = arvore2
         self.usuario= None
-        self.livro=None
+        self.livro = None
+        self.mensagem = QtWidgets.QMessageBox
 
     def iniciarUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -442,6 +443,11 @@ class Ui_MainWindow(object):
         self.button_buscar_livro.clicked.connect(self.buscarLivro)
         self.button_buscar_usuario.clicked.connect(self.buscarUsuario)
         self.button_Cadastrar_usuario.clicked.connect(self.cadastroUsuario)
+        self.button_alugar.clicked.connect(self.alugarLivro)
+        self.button_Descadastrar_livro.clicked.connect(self.descadastroLivro)
+        self.button_Descadastrar_usuario.clicked.connect(self.descadastroUsuario)
+        self.button_devolver.clicked.connect(self.devolverLivro)
+
 
     def cadastroLivro(self):
         titulo =  self.editText_nome_livros.text()
@@ -460,83 +466,86 @@ class Ui_MainWindow(object):
         no = self.arvore_livro.buscar(titulo)
         self.arvore_livro.delete(no)
 
-    def descadastroUsuario(self, arvore):
+    def descadastroUsuario(self):
         cpf =  self.editText_cpf_usuario
         no = self.arvore_usuario.buscar(cpf)
         self.arvore_usuario.delete(no)
 
-    def alugarLivro(self, arvore): #tem coisa pacas pra mudar aqui
-        tituloDesejado = self.editText_buscar_livro.text()
-        no = self.arvore_livro.buscar(tituloDesejado)
-        disp = no.getQuantidade()
-        resev = no.isReservado()
-        usuario = self.arvore_usuario.buscar(self.editText_buscar_usuario.text())
-        if disp == 0 and resev == False:
-            print("Desculpe, mas o livro não está disponivel")
-            print("Deseja reservar?(Y/N)")
-            resposta = input()
-            if resposta == "Y":
-                no.addReservado(usuario.getValor())
-            else:
-                print("Obrigado pela preferência, caso deseje outro título, por favor informe o nome!")
-        elif disp != 0 and resev == True:
-            print("O livro já está reservado!")
-            print("Deseja entrar na fila da reserva?(Y/N)")
-            resposta = input()
-            if resposta == "Y":
-                no.addReservado(usuario.getValor())
-                print("Você é o número", no.reservou.index(usuario.getValor()) + 1, "da fila")
-            else:
-                print("Obrigado pela preferência, caso deseje outro título, por favor informe o nome!")
-        elif disp != 0 and resev == False:
-            print("Livro disponivel, este realmente é o título que você deseja?(Y/N)")
-            resposta = input()
-            if resposta == "Y":
-                usuario.addAlugados(no)
-                no.addAlugado(usuario.getValor())
-                no.mudarQuantidade(-1)
-            else:
-                print("Obrigado pela preferência, caso deseje outro título, por favor informe o nome!")
+    def alugarLivro(self):
+        tituloDesejado = self.textView_nome_Livro.text()
+        livro = self.arvore_livro.buscar(tituloDesejado)
+        if livro != None:
+            disponibilidade = livro.getQuantidade()
+            reservado = livro.isReservado()
+            usuario = self.arvore_usuario.buscar(self.textView_Nome_usuario.text())
+            if usuario != None:
+                if disponibilidade == 0 and reservado == False:
+                    mensagem= QtWidgets.QMessageBox.question(self.mensagem,self,"Aviso!",
+                                                            "Livro nao disponivel, deseja alugar?",
+                                                            QtWidgets.QMessageBox.Yes |
+                                                             QtWidgets.QMessageBox.No)
+                    mensagem.show()
+                    if mensagem == QtWidgets.QMessageBox.Yes:
+                        livro.adicionarReserva(usuario.getChave())
+                elif disponibilidade != 0 and reservado == True:
+                    mensagem = QtWidgets.QMessageBox.question(self.mensagem, self, "Aviso!",
+                                                              "O Livro ja esta reservado!, deseja entra na fila?",
+                                                              QtWidgets.QMessageBox.Yes |
+                                                              QtWidgets.QMessageBox.No)
 
-    def devolverLivro(self,): # coisa p carai pra ajeitar aqui tb
-        tituloRetornado =  self.editText_buscar_livro.text()
-        no = self.arvore_livro.buscar(tituloRetornado)
-        disp = no.getQuantidade()
-        resev = no.isReservado()
-        usuario= self.arvore_usuario.buscar(self.editText_buscar_usuario.text())
-        if disp == 0 and resev == True:
-            no.removeAlugado(usuario.getValor())
-            reservou = no.removeReservado()
-            no.addAlugado(reservou)
-            usuario.removerAlugado(no)
-            print("Livro retornado com sucesso!")
-            if len(no.reservou) == 0:
-                no.reservado = False
-        elif disp != 0:
-            no.removeAlugado(usuario.getValor())
-            usuario.removerAlugado(no)
-            no.mudarQuantidade(1)
-            print("Livro retornado com sucesso!")
+                    if mensagem == QtWidgets.QMessageBox.Yes:
+                        livro.addReservado(usuario.getChave())
+                elif disponibilidade != 0 and reservado == False:
+                    mensagem = QtWidgets.QMessageBox.question(self.mensagem, self, "Aviso!",
+                                                              "Livro disponivel, este realmente é o título que você deseja?",
+                                                              QtWidgets.QMessageBox.Yes |
+                                                              QtWidgets.QMessageBox.No)
+                    if mensagem == QtWidgets.QMessageBox.Yes:
+                        usuario.adicionarAlugado(livro)
+                        livro.addAluguel(usuario.getChave())
+                        livro.mudarQuantidade(-1)
+
+    def devolverLivro(self,):
+        tituloRetornado =  self.textView_nome_Livro.text()
+        livro = self.arvore_livro.buscar(tituloRetornado)
+        if livro != None:
+            disponibilidade = livro.getQuantidade()
+            reservado = livro.isReservado()
+            usuario= self.arvore_usuario.buscar(self.textView_Nome_usuario.text())
+            if usuario != None:
+                if disponibilidade == 0 and reservado == True:
+                    livro.removeAluguel(usuario.getChave())
+                    reservou = livro.removeReservado()
+                    livro.adicionarAluguel(reservou)
+                    usuario.removerAlugado(livro)
+                    QtWidgets.QMessageBox.setText(QtWidgets.QMessageBox,"Livro Retornado com sucesso")
+                    if len(livro.reservou) == 0:
+                        livro.reservado = False
+                elif disponibilidade != 0:
+                    livro.removeAluguel(usuario.getChave())
+                    usuario.removerAlugado(livro)
+                    livro.mudarQuantidade(1)
+                    QtWidgets.QMessageBox.setText(QtWidgets.QMessageBox, "Livro Retornado com sucesso")
 
     def buscarUsuario(self):
-        no=self.arvore_usuario.buscar(self.editText_buscar_usuario.text())
-        self.textView_Nome_usuario.setText(no.getNome())
-        if len(no.getAlugados()) !=0:
-            for i in no.getAlugados():
+        usuario=self.arvore_usuario.buscar(self.editText_buscar_usuario.text())
+        self.textView_Nome_usuario.setText(usuario.getNome())
+        if len(usuario.getAlugados()) !=0:
+            for i in usuario.getAlugados():
                 item = QtWidgets.QListWidgetItem(i)
                 self.list_Alugou.addItem(item)
-        self.usuario=no
+        self.usuario=usuario
 
     def buscarLivro(self):
-        no = self.arvore_livro.buscar(self.editText_buscar_livro.text())
-        self.textView_nome_Livro.setText(no.getValor())
-        self.textView_Quantidade.setText(str(no.getQuantidade()))
-        if no.isDisponivel == True:
-            self.textView_isDisponivel.setText("disponivel")
+        livro = self.arvore_livro.buscar(self.editText_buscar_livro.text())
+        self.textView_nome_Livro.setText(livro.getChave())
+        self.textView_Quantidade.setText(str(livro.getQuantidade()))
+        if livro.getQuantidade() > 0 :
+            self.textView_isDisponivel.setText("Disponivel")
         else:
             self.textView_isDisponivel.setText("Nao Disponivel")
-        if len(no.getAlugado()) != 0:
-            for i in no.getAlugado():
+        if len(livro.getAluguel()) != 0:
+            for i in livro.getAluguel():
                 item = QtWidgets.QListWidgetItem(i)
                 self.list_Alugados.addItem(item)
 
