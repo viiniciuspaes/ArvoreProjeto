@@ -1,4 +1,4 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 import  sys
 
 class Usuario:
@@ -264,7 +264,6 @@ class ArvoreRB:
             else:
                 x = x.getAnterior()
         return x
-
 
 class Ui_MainWindow(object):
     def __init__(self, arvore,arvore2,box):
