@@ -201,7 +201,12 @@ class ArvoreRB:
         noRotacionado.setPai(no)
         if no.getPai() == None:
             self.raiz = no
-        #falta coisa
+        elif no == no.getPai().getProximo():
+            no.getPai().setProximo(noRotacionado)
+        else:
+            no.getPai().setAnterior(noRotacionado)
+        noRotacionado.setRight(no)
+        no.setPai(noRotacionado)
 
     def delete(self,no):
         if no.getAnterior() == None and no.getProximo()== None:
@@ -555,6 +560,5 @@ def run():
     ui.iniciarUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
-
 
 run()
