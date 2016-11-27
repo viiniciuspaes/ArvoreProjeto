@@ -265,6 +265,12 @@ class ArvoreRB:
                 x = x.getAnterior()
         return x
 
+    def percorrerEmOrdem(self, no):
+        if no != None:
+            self.percorrerEmOrdem(no.getAnterior())
+            print(no.getChave())
+            self.percorrerEmOrdem(no.getProximo())
+
 class Ui_MainWindow(object):
     def __init__(self, arvore,arvore2,box):
         self.arvore_livro = arvore
