@@ -91,9 +91,13 @@ class Livro:
         self.cor=cor
 
 
-class ArvoreRB:
+class ArvoreRB:   # talvez remover esse self null ai das coisas e trocar arvore pela de luiz
     def __init__(self):
-        self.raiz = None
+        self.null = Usuario(None,None)
+        self.null.setPai(self.null)
+        self.null.setAnterior(self.null)
+        self.null.setProximo(self.null)
+        self.raiz = self.null
 
     def minimoArvore(self,no):
         while no.getAnterior() != None:
@@ -122,27 +126,31 @@ class ArvoreRB:
         return auxiliar
 
     def inserir(self,no):
-        if self.raiz == None:
+        if self.raiz == self.null:
             self.raiz=no
+            self.raiz.setProximo(self.null)
+            self.raiz.setAnterior(self.null)
         else:
             self.inseri(no)
 
     def inseri(self, no):
-        auxiliar = None
+        auxiliar = self.null
         noLocal = self.raiz
-        while noLocal != None:
+        while noLocal != self.null:
             auxiliar = noLocal
             if no.getChave() < noLocal.getChave():
                 noLocal = noLocal.getAnterior()
             else:
                 noLocal = noLocal.getProximo()
         no.setPai(auxiliar)
-        if auxiliar == None:
+        if auxiliar == self.null:
             self.raiz=no
         elif no.getChave() < auxiliar.getChave():
             auxiliar.setAnterior(no)
         else:
             auxiliar.setProximo(no)
+        no.setAnterior(self.null)
+        no.setProximo(self.null)
         no.setCor("vermelho")
         self.inserirFix(no)
 
@@ -183,7 +191,7 @@ class ArvoreRB:
         no.setProximo(noRotacionado.getAnterior())
         noRotacionado.getAnterior().setPai(no)
         noRotacionado.setPai(no.getPai())
-        if no.getPai() == None:
+        if no.getPai() == self.null:
             self.raiz = noRotacionado
         elif no == no.getPai().getAnterior():
             no.getPai().setAnterior(noRotacionado)
@@ -199,7 +207,7 @@ class ArvoreRB:
         noRotacionado.getAnterior().setPai(noRotacionado)
         no.setPai(noRotacionado.getPai())
         noRotacionado.setPai(no)
-        if no.getPai() == None:
+        if no.getPai() == self.null:
             self.raiz = no
         elif no == no.getPai().getProximo():
             no.getPai().setProximo(noRotacionado)
@@ -377,8 +385,8 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralWidget)
 
         self.nomearUi(MainWindow)
-        self.menu.setCurrentIndex(1)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.menu.setCurrentIndex(0)
+        #QtCore.QMetaObject.connectSlotsByName(MainWindow)
         self.func()
 
     def nomearUi(self, MainWindow):
