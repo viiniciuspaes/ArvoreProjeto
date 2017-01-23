@@ -374,10 +374,10 @@ class Ui_MainWindow(object):
         self.button_reservar.setGeometry(QtCore.QRect(280, 520, 85, 27))
         self.button_alugar = QtWidgets.QPushButton(self.frame_2)
         self.button_alugar.setGeometry(QtCore.QRect(690, 520, 85, 27))
-        self.list_Alugados = QtWidgets.QListView(self.frame_2)
+        self.list_Alugados = QtWidgets.QListWidget(self.frame_2)
         self.list_Alugados.setGeometry(QtCore.QRect(10, 30, 471, 141))
         self.list_Alugados.setFlow(QtWidgets.QListView.LeftToRight)
-        self.list_Alugou = QtWidgets.QListView(self.frame_2)
+        self.list_Alugou = QtWidgets.QListWidget(self.frame_2)
         self.list_Alugou.setGeometry(QtCore.QRect(10, 330, 471, 151))
         self.list_Alugou.setFlow(QtWidgets.QListView.LeftToRight)
         self.menu.addTab(self.Biblioteca, "")
@@ -434,19 +434,24 @@ class Ui_MainWindow(object):
         quantidade =  int(self.editText_quantidade_livros.text())
         livro = Livro(titulo, quantidade)
         self.arvore_livro.inserir(livro)
+        mensagem = QtWidgets.QMessageBox.about(self.mensagem,"Aviso!",
+                                                            "Livro Cadastrado com Sucesso!")
 
     def cadastroUsuario(self):
         cpf =  self.editText_cpf_usuario.text()
         nome = self.editText_nome_usuario.text()
         usuario = Usuario(cpf, nome)
         self.arvore_usuario.inserir(usuario)
-
+        mensagem = QtWidgets.QMessageBox.about(self.mensagem, "Aviso!",
+                                                  "Usuario Cadastrado com Sucesso!")
     def descadastroLivro(self):
         self.arvore_livro.delete(self.livro)
-
+        mensagem = QtWidgets.QMessageBox.about(self.mensagem, "Aviso!",
+                                                  "Livro Descadastrado com Sucesso!")
     def descadastroUsuario(self):
         self.arvore_usuario.delete(self.usuario)
-
+        mensagem = QtWidgets.QMessageBox.about(self.mensagem, "Aviso!",
+                                                  "Usuario Descadastrado com Sucesso!")
     def alugarLivro(self):
         livro = self.livro
         if livro != None:
@@ -455,8 +460,8 @@ class Ui_MainWindow(object):
             usuario = self.usuario
             if usuario != None:
                 if disponibilidade == 0 and reservado == False:
-                    mensagem= QtWidgets.QMessageBox.question(self.mensagem,"Aviso!",
-                                                            "Livro nao disponivel, deseja alugar?",
+                    mensagem = QtWidgets.QMessageBox.question(self.mensagem,"Aviso!",
+                                                            "Livro nao disponivel, deseja reservar?",
                                                             QtWidgets.QMessageBox.Yes |
                                                              QtWidgets.QMessageBox.No)
                     if mensagem == QtWidgets.QMessageBox.Yes:
@@ -470,13 +475,13 @@ class Ui_MainWindow(object):
                     if mensagem == QtWidgets.QMessageBox.Yes:
                         livro.adicionarReserva(usuario)
                 elif disponibilidade != 0 and reservado == False:
-                    mensagem = QtWidgets.QMessageBox.question(self.mensagem, "Aviso!","Livro disponivel!")
+                    mensagem = QtWidgets.QMessageBox.about(self.mensagem, "Aviso!","Livro disponivel! Cadastrado com Sucesso")
                     usuario.adicionarAlugado(livro)
                     livro.adicionarAluguel(usuario)
                     livro.mudarQuantidade(-1)
 
 
-    def devolverLivro(self,):
+    def devolverLivro(self):
         livro = self.livro
         if livro != None:
             disponibilidade = livro.getQuantidade()
@@ -488,18 +493,19 @@ class Ui_MainWindow(object):
                     reservou = livro.removeReservado()
                     livro.adicionarAluguel(reservou)
                     usuario.removerAlugado(livro)
-                    mensagem = QtWidgets.QMessageBox.question(self.mensagem, "Aviso!", "Livro restornado com sucesso!")
+                    mensagem = QtWidgets.QMessageBox.about(self.mensagem, "Aviso!", "Livro restornado com sucesso!")
                     if len(livro.reservou) == 0:
                         livro.reservado = False
                 elif disponibilidade != 0:
-                    livro.removeAluguel(usuario.getChave())
+                    livro.removeAluguel(usuario)
                     usuario.removerAlugado(livro)
                     livro.mudarQuantidade(1)
-                    mensagem = QtWidgets.QMessageBox.question(self.mensagem, "Aviso!", "Livro restornado com sucesso!")
+                    mensagem = QtWidgets.QMessageBox.about(self.mensagem, "Aviso!", "Livro restornado com sucesso!")
 
     def buscarUsuario(self):
         usuario=self.arvore_usuario.buscar(self.editText_buscar_usuario.text())
         self.textView_Nome_usuario.setText(usuario.getNome())
+        self.list_Alugados.clear()
         if len(usuario.getAlugados()) !=0:
             for i in usuario.getAlugados():
                 item = QtWidgets.QListWidgetItem(i.getChave())
@@ -514,6 +520,7 @@ class Ui_MainWindow(object):
             self.textView_isDisponivel.setText("Disponivel")
         else:
             self.textView_isDisponivel.setText("Nao Disponivel")
+        self.list_Alugou.clear()
         if len(livro.getAluguel()) != 0:
             for i in livro.getAluguel():
                 item = QtWidgets.QListWidgetItem(i.getNome())
