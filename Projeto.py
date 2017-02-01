@@ -121,7 +121,7 @@ class No:
         self.cor=cor
 
 
-class ArvoreRB:   # talvez remover esse self null ai das coisas e trocar arvore pela de luiz
+class ArvoreRB:
     def __init__(self):
         self.null = No(None)
         self.null.setPai(self.null)
@@ -225,8 +225,6 @@ class ArvoreRB:   # talvez remover esse self null ai das coisas e trocar arvore 
     def rotEsq(self, no):
         noRotacionado = no.getProximo()
         no.setProximo(noRotacionado.getAnterior())
-        #noRotacionado.getAnterior().setPai(no)
-        #noRotacionado.setPai(no.getPai())
         if noRotacionado.getAnterior() != self.null:
             noRotacionado.getAnterior().setPai(no)
         noRotacionado.setPai(no.getPai())
@@ -240,13 +238,7 @@ class ArvoreRB:   # talvez remover esse self null ai das coisas e trocar arvore 
         no.setPai(noRotacionado)
 
     def rotDir(self,no):
-        #noRotacionado = no.getPai()
         noRotacionado= no.getAnterior()
-        #noRotacionado.setAnterior(no.getProximo())
-        #no.setProximo(noRotacionado)
-        #noRotacionado.getAnterior().setPai(noRotacionado)
-        #no.setPai(noRotacionado.getPai())
-        #noRotacionado.setPai(no)
         no.setAnterior(noRotacionado.getProximo())
         if noRotacionado.getProximo() != self.null:
             noRotacionado.getProximo().setPai(no)
@@ -447,7 +439,6 @@ class Ui_MainWindow(object):
 
         self.nomearUi(MainWindow)
         self.menu.setCurrentIndex(0)
-        #QtCore.QMetaObject.connectSlotsByName(MainWindow)
         self.func()
 
     def nomearUi(self, MainWindow):
