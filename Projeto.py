@@ -160,7 +160,7 @@ class ArvoreRB:
             no = auxiliar
             auxiliar = auxiliar.getPai()
         return auxiliar
-
+    
     def inserir(self, no):
         auxiliar = self.null
         noLocal = self.getRaiz()
