@@ -328,7 +328,7 @@ class ArvoreRB:
             self.percorrerEmOrdem(no.getAnterior(),arquivo)
             string = " - "
             for x in no.getAluguel():
-                string = string + str(x)
+                string = string + str(x.getNome()) + " / "
             arquivo.writelines(str(no.getChave() + string))
             self.percorrerEmOrdem(no.getProximo(),arquivo)
 
@@ -502,6 +502,7 @@ class Ui_MainWindow(object):
                                                   "Usuario Descadastrado com Sucesso!")
     def relatorio(self):
         arquivo = open("Livros da Biblioteca.txt", "w")
+        arquivo.writelines("Relatorio de Livros")
         self.arvore_livro.percorrerEmOrdem(self.arvore_livro.getRaiz(),arquivo)
         arquivo.close()
 
