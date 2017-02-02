@@ -323,11 +323,14 @@ class ArvoreRB:
                 x = x.getAnterior()
         return x
 
-    def percorrerEmOrdem(self, no):
+    def percorrerEmOrdem(self, no, arquivo):
         if no != self.null:
-            self.percorrerEmOrdem(no.getAnterior())
-            print(no.getChave())
-            self.percorrerEmOrdem(no.getProximo())
+            self.percorrerEmOrdem(no.getAnterior(),arquivo)
+            string = " - "
+            for x in no.getAluguel():
+                string = string + str(x)
+            arquivo.writelines(str(no.getChave() + string))
+            self.percorrerEmOrdem(no.getProximo(),arquivo)
 
 class Ui_MainWindow(object):
     def __init__(self, arvore,arvore2,box):
@@ -456,7 +459,7 @@ class Ui_MainWindow(object):
         self.label_quantidade.setText( "Quantidade:")
         self.textView_Quantidade.setText( "numeros")
         self.button_devolver.setText("Devolver")
-        self.button_reservar.setText("Reservar")
+        self.button_reservar.setText("Relatorio")
         self.button_alugar.setText("Alugar")
         self.menu.setTabText(self.menu.indexOf(self.Biblioteca),"Biblioteca")
 
@@ -471,6 +474,7 @@ class Ui_MainWindow(object):
         self.button_devolver.clicked.connect(self.devolverLivro)
         self.button_Cancelar.clicked.connect(sys.exit)
         self.button_Cancelar_2.clicked.connect(sys.exit)
+        self.button_reservar.clicked.connect(self.relatorio)
 
 
     def cadastroLivro(self):
@@ -496,6 +500,11 @@ class Ui_MainWindow(object):
         self.arvore_usuario.delete(self.usuario)
         mensagem = QtWidgets.QMessageBox.about(self.mensagem, "Aviso!",
                                                   "Usuario Descadastrado com Sucesso!")
+    def relatorio(self):
+        arquivo = open("Livros da Biblioteca.txt", "w")
+        self.arvore_livro.percorrerEmOrdem(self.arvore_livro.getRaiz(),arquivo)
+        arquivo.close()
+
     def alugarLivro(self):
         livro = self.livro
         if livro != None:
