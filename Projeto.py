@@ -161,14 +161,6 @@ class ArvoreRB:
             auxiliar = auxiliar.getPai()
         return auxiliar
 
-    def teste(self,no):
-        if self.raiz == self.null:
-            self.raiz=no
-            self.raiz.setProximo(self.null)
-            self.raiz.setAnterior(self.null)
-        else:
-            self.inseri(no)
-
     def inserir(self, no):
         auxiliar = self.null
         noLocal = self.getRaiz()
