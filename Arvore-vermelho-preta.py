@@ -1,4 +1,4 @@
-class NoHash:
+class No:
     def __init__(self,valor):
         self.valor = valor
         self.anterior = None
@@ -32,65 +32,72 @@ class NoHash:
 
 class ArvoreRB:
     def __init__(self):
-        self.raiz = None
-        #self.null = NoHash(None) #nao sei se sera necessario criar um ponteiro para um No preto null
+        self.null = No(None)
+        self.null.setPai(self.null)
+        self.null.setAnterior(self.null)
+        self.null.setProximo(self.null)
+        self.raiz = self.null
 
-    def minimoArvore(self,no):
-        while no.getAnterior() != None:
+    def getRaiz(self):
+        return self.raiz
+
+    def setRaiz(self, no):
+        self.raiz = no
+
+    def minimoArvore(self, no):
+        while no.getAnterior() != self.null:
             no = no.getAnterior()
         return no
-    def maximoArvore(self,no):
-        while no.getProximo() != None:
-            no=no.getProximo()
+
+    def maximoArvore(self, no):
+        while no.getProximo() != self.null:
+            no = no.getProximo()
         return no
 
-    def sucessorArvore(self,no):
-        if no.getProximo() != None:
+    def sucessorArvore(self, no):
+        if no.getProximo() != self.null:
             return self.minimoArvore(no.getProximo())
         auxiliar = no.getPai()
-        while auxiliar != None and no == auxiliar.getProximo():
+        while auxiliar != self.null and no == auxiliar.getProximo():
             no = auxiliar
             auxiliar = auxiliar.getPai()
         return auxiliar
-    def predecessorArvore(self,no):
-        if no.getAnterior != None:
+
+    def predecessorArvore(self, no):
+        if no.getAnterior != self.null:
             return self.maximoArvore(no.getAnterior())
         auxiliar = no.getPai()
-        while auxiliar != None and no == auxiliar.getAnterior():
+        while auxiliar != self.null and no == auxiliar.getAnterior():
             no = auxiliar
             auxiliar = auxiliar.getPai()
         return auxiliar
 
-    def inserir(self,no):
-        if self.raiz == None:
-            self.raiz=no
-        else:
-            self.inseri(no)
-
-    def inseri(self, no):
-        auxiliar = None
-        noLocal = self.raiz
-        while noLocal != None:
+    def inserir(self, no):
+        auxiliar = self.null
+        noLocal = self.getRaiz()
+        while noLocal != self.null:
             auxiliar = noLocal
-            if no.getValor() < noLocal.getValor():
+            if no.getChave() < noLocal.getChave():
                 noLocal = noLocal.getAnterior()
             else:
                 noLocal = noLocal.getProximo()
         no.setPai(auxiliar)
-        if auxiliar == None:
-            self.raiz=no
-        elif no.getValor() < auxiliar.getValor():
+        if auxiliar == self.null:
+            self.setRaiz(no)
+        elif no.getChave() < auxiliar.getChave():
             auxiliar.setAnterior(no)
         else:
             auxiliar.setProximo(no)
+        no.setAnterior(self.null)
+        no.setProximo(self.null)
         no.setCor("vermelho")
         self.inserirFix(no)
 
     def inserirFix(self, no):
         while no.getPai().getCor() == "vermelho":
-            if no.getPai() ==  no.getPai().getPai().getAnterior():
+            if no.getPai() == no.getPai().getPai().getAnterior():
                 auxiliar = no.getPai().getPai().getProximo()
-                if auxiliar.getCor() ==  "vermelho":
+                if auxiliar.getCor() == "vermelho":
                     no.getPai().setCor("preto")
                     auxiliar.setCor("preto")
                     no.getPai().getPai().setCor("vermelho")
@@ -110,20 +117,21 @@ class ArvoreRB:
                     no.getPai().getPai().setCor("vermelho")
                     no = no.getPai().getPai()
                 else:
-                    if auxiliar == auxiliar.getPai().getAnterior():
+                    if no == no.getPai().getAnterior():
                         no = no.getPai()
                         self.rotDir(no)
                     no.getPai().setCor("preto")
                     no.getPai().getPai().setCor("vermelho")
                     self.rotEsq(no.getPai().getPai())
-        self.raiz.setCor("preto")
+        self.getRaiz().setCor("preto")
 
     def rotEsq(self, no):
         noRotacionado = no.getProximo()
         no.setProximo(noRotacionado.getAnterior())
-        noRotacionado.getAnterior().setPai(no)
+        if noRotacionado.getAnterior() != self.null:
+            noRotacionado.getAnterior().setPai(no)
         noRotacionado.setPai(no.getPai())
-        if no.getPai() == None:
+        if no.getPai() == self.null:
             self.raiz = noRotacionado
         elif no == no.getPai().getAnterior():
             no.getPai().setAnterior(noRotacionado)
@@ -132,75 +140,104 @@ class ArvoreRB:
         noRotacionado.setAnterior(no)
         no.setPai(noRotacionado)
 
-    def rotDir(self,no):
-        noRotacionado = no.getPai()
-        noRotacionado.setAnterior(no.getProximo())
-        no.setProximo(noRotacionado)
-        noRotacionado.getAnterior().setPai(noRotacionado)
-        no.setPai(noRotacionado.getPai())
-        noRotacionado.setPai(no)
-        if no.getPai() == None:
-            self.raiz = no
-        #falta ?
+    def rotDir(self, no):
+        noRotacionado = no.getAnterior()
+        no.setAnterior(noRotacionado.getProximo())
+        if noRotacionado.getProximo() != self.null:
+            noRotacionado.getProximo().setPai(no)
+        noRotacionado.setPai(no.getPai())
+        if no.getPai() == self.null:
+            self.raiz = noRotacionado
+        elif no == no.getPai().getProximo():
+            no.getPai().setProximo(noRotacionado)
+        else:
+            no.getPai().setAnterior(noRotacionado)
+        noRotacionado.setRight(no)
+        no.setPai(noRotacionado)
 
-    def delete(self,no):
-        if no.getAnterior() == None and no.getProximo()== None:
+    def delete(self, no):
+        if no.getAnterior() == self.null and no.getProximo() == self.null:
             auxiliar = no
         else:
-           auxiliar = self.sucessorArvore(no)
-        if auxiliar.getAnterior() != None:
+            auxiliar = self.sucessorArvore(no)
+        if auxiliar.getAnterior() != self.null:
             x = auxiliar.getAnterior()
         else:
             x = auxiliar.getProximo()
         x.setPai(auxiliar.setPai())
-        if auxiliar.getPai() != None:    #livro com erro?
-            self.raiz = x
-        elif auxiliar == auxiliar.getPai().getAnterior():
-            auxiliar.getPai().setAnterior(x)
+        if auxiliar.getPai() != self.null:
+            self.setRaiz(x)
         else:
-            auxiliar.getPai().setProximo(x)
+            if auxiliar == auxiliar.getPai().getAnterior():
+                auxiliar.getPai().setAnterior(x)
+            else:
+                auxiliar.getPai().setProximo(x)
         if auxiliar != no:
-            no.setValor(x.getValor())
+            no.setChave(x.getChave())
         if auxiliar.getCor() == "preto":
             self.deleteFix(x)
         return auxiliar
 
-    def deleteFix(self,no):
-        while no != self.raiz:
+    def deleteFix(self, no):
+        while no != self.getRaiz() and no.getCor() == "preto":
             if no == no.getPai().getAnterior():
                 auxiliar = no.getPai().getProximo()
-                if auxiliar.getCor() == "preto":
+                if auxiliar.getCor() == "vermelho":
+                    auxiliar.setCor("preto")
                     no.getPai().setCor("vermelho")
                     self.rotEsq(no.getPai())
-                    auxiliar=no.getPai().getProximo()
-                if auxiliar.getAnterior().getCor() == "preto" and auxiliar.getProximo().getCor()=="vermelho":
-                    auxiliar.setCor("vermelho")
-                    no=no.getPai()
-                elif auxiliar.getProximo().getCor() == "preto":
-                    auxiliar.getAnterior().setCor("vermelho")
-                    self.rotDir(auxiliar)
                     auxiliar = no.getPai().getProximo()
+                if auxiliar.getAnterior().getCor() == "preto" and auxiliar.getProximo().getCor() == "preto":
+                    auxiliar.setCor("vermelho")
+                    no = no.getPai()
+                else:
+                    if auxiliar.getProximo().getCor() == "preto":
+                        auxiliar.getAnterior().setCor("preto")
+                        auxiliar.setCor("vermelho")
+                        self.rotDir(auxiliar)
+                        auxiliar = no.getPai().getProximo()
                     auxiliar.setCor(no.getPai().getCor())
                     no.getPai().setCor("preto")
                     auxiliar.getProximo().setCor("preto")
                     self.rotEsq(no.getPai())
-                    no=self.raiz
-                else:
-                    auxiliar.getProximo().setCor("vermelho")
-                    self.rotDir(auxiliar)
+                    no = self.getRaiz()
+            else:
+                auxiliar = no.getPai().getAnterior()
+                if auxiliar.getCor() == "vermelho":
+                    auxiliar.setCor("preto")
+                    no.getPai().setCor("vermelho")
+                    self.rotDir(no.getPai())
                     auxiliar = no.getPai().getAnterior()
+                if auxiliar.getProximo().getCor() == "preto" and auxiliar.getAnterior().getCor() == "preto":
+                    auxiliar.setCor("vermelho")
+                    no = no.getPai()
+                else:
+                    if auxiliar.getAnterior().getCor() == "preto":
+                        auxiliar.getProximo().setCor("preto")
+                        auxiliar.setCor("vermelho")
+                        self.rotEsq(auxiliar)
+                        auxiliar = no.getPai().getAnterior()
                     auxiliar.setCor(no.getPai().getCor())
                     no.getPai().setCor("preto")
-                    auxiliar.getAnterior().setCor("preto")
-                    self.rotEsq(no.getPai())
-                    no = self.raiz
+                    auxiliar.getAnterior.setCor("preto")
+                    self.rotDir(no.getPai())
+                    no = self.getRaiz()
         no.setCor("preto")
 
-    def buscar(self, valor):  # busca nao recursiva custo menor mas sem graça
+    def buscar(self, chave):
         x = self.raiz
-        while x != None and valor != x.getValor():
-            if valor > x.getValor():
+        while x != self.null and chave != x.getChave():
+            if chave > x.getChave():
                 x = x.getProximo()
             else:
                 x = x.getAnterior()
         return x
+
+    def percorrerEmOrdem(self, no, arquivo):
+        if no != self.null:
+            self.percorrerEmOrdem(no.getAnterior(), arquivo)
+            string = " - "
+            for x in no.getAluguel():
+                string = string + str(x.getNome()) + " / "
+            arquivo.writelines(str(no.getChave() + string))
+            self.percorrerEmOrdem(no.getProximo(), arquivo)
