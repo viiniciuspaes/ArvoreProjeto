@@ -101,7 +101,7 @@ class No:
 
     def getChave(self):
         return self.valor
-    def setValor(self,valor):
+    def setChave(self,valor):
         self.valor=valor
     def getAnterior(self):
         return self.anterior
