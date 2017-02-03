@@ -99,7 +99,7 @@ class No:
 
     # -------------------Gets and Sets--------------------------
 
-    def getValor(self):
+    def getChave(self):
         return self.valor
     def setValor(self,valor):
         self.valor=valor
