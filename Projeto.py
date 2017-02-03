@@ -241,7 +241,7 @@ class ArvoreRB:
             no.getPai().setProximo(noRotacionado)
         else:
             no.getPai().setAnterior(noRotacionado)
-        noRotacionado.setRight(no)
+        noRotacionado.setProximo(no)
         no.setPai(noRotacionado)
 
     def delete(self,no):
