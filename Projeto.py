@@ -493,11 +493,13 @@ class Ui_MainWindow(object):
         mensagem = QtWidgets.QMessageBox.about(self.mensagem, "Aviso!",
                                                   "Usuario Cadastrado com Sucesso!")
     def descadastroLivro(self):
-        self.arvore_livro.delete(self.livro)
+        livro = self.arvore_livro.buscar(self.editText_nome_livros.text())
+        self.arvore_livro.delete(livro)
         mensagem = QtWidgets.QMessageBox.about(self.mensagem, "Aviso!",
                                                   "Livro Descadastrado com Sucesso!")
     def descadastroUsuario(self):
-        self.arvore_usuario.delete(self.usuario)
+        usuario = self.arvore_livro.buscar(self.editText_nome_usuario.text())
+        self.arvore_livro.delete(usuario)
         mensagem = QtWidgets.QMessageBox.about(self.mensagem, "Aviso!",
                                                   "Usuario Descadastrado com Sucesso!")
     def relatorio(self):
